@@ -1,6 +1,6 @@
 <?php
 
-namespace Apadana\Product\Providers;
+namespace MojaHedi\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;

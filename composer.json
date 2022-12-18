@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Apadana\\Product\\": "src"
+            "MojaHedi\\Product\\": "src"
         },
         "files": [
             "src/helpers.php"
@@ -40,13 +40,13 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Apadana\\Product\\Test\\": "tests"
+            "MojaHedi\\Product\\Test\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Apadana\\Product\\Providers\\ProductServiceProvider"
+                "MojaHedi\\Product\\Providers\\ProductServiceProvider"
             ]
         }
     },
