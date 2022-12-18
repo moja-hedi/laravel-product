@@ -4,6 +4,7 @@ namespace MojaHedi\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
+use Illuminate\Filesystem\Filesystem;
 
 class ProductServiceProvider extends ServiceProvider
 {
