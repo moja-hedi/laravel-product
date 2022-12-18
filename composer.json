@@ -1,0 +1,61 @@
+{
+    "name": "apadana/laravel-product",
+    "description": "Permission handling for Laravel 6.0 and up",
+    "keywords": [
+        "apadana",
+        "laravel",
+        "product management",
+        "product",
+        "online shop system"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "aram",
+            "email": "huseiny.aram@gmail.com"
+        },
+        {
+            "name": "moja",
+            "email": "m.abbaszadeh@apadanagroup.org"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5|^8.0",
+        "illuminate/container": "^6.0|^7.0|^8.0",
+        "illuminate/contracts": "^6.0|^7.0|^8.0",
+        "illuminate/database": "^6.0|^7.0|^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0|^5.0|^6.0",
+        "phpunit/phpunit": "^8.0|^9.0",
+        "predis/predis": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Apadana\\Product\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Apadana\\Product\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Apadana\\Product\\Providers\\ProductServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
