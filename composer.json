@@ -1,8 +1,8 @@
 {
-    "name": "apadana/laravel-product",
-    "description": "Permission handling for Laravel 6.0 and up",
+    "name": "moja-hedi/laravel-product",
+    "description": "Product management package",
     "keywords": [
-        "apadana",
+        "moja-hedi",
         "laravel",
         "product management",
         "product",
