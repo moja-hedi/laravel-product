@@ -5,6 +5,10 @@ namespace MojaHedi\Product\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\AliasLoader;
+use MojaHedi\Product\Facades\ProductServiceFacade;
+use MojaHedi\Product\Repositories\ProductRepository;
+use MojaHedi\Product\Services\ProductService;
 
 class ProductServiceProvider extends ServiceProvider
 {
@@ -16,6 +20,20 @@ class ProductServiceProvider extends ServiceProvider
     public function register()
     {
 
+        $this->app->singleton('productRepository', ProductRepository::class);
+
+
+        $this->app->singleton('productsService', function ($app) {
+            $productService = new ProductService($app['productRepository']);
+
+            // $productService->setProductRepository($app['productRepository']);
+
+            return $productService;
+        });
+
+        $loader = AliasLoader::getInstance();
+        $loader->alias('productsService', ProductServiceFacade::class);
+
     }
 
     protected function offerPublishing()
@@ -26,11 +44,11 @@ class ProductServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/../config/product.php' => config_path('product.php'),
+            __DIR__.'/../../config/product.php' => config_path('product.php'),
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../database/migrations/create_product_tables.php.stub' => $this->getMigrationFileName('create_product_tables.php'),
+            __DIR__.'/../../database/migrations/create_product_tables.php.stub' => $this->getMigrationFileName('create_product_tables.php'),
         ], 'migrations');
     }
 
