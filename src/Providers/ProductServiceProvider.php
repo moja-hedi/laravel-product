@@ -23,7 +23,7 @@ class ProductServiceProvider extends ServiceProvider
         $this->app->singleton('productRepository', ProductRepository::class);
 
 
-        $this->app->singleton('productsService', function ($app) {
+        $this->app->singleton('ProductsService', function ($app) {
             $productService = new ProductService($app['productRepository']);
 
             // $productService->setProductRepository($app['productRepository']);
@@ -32,7 +32,7 @@ class ProductServiceProvider extends ServiceProvider
         });
 
         $loader = AliasLoader::getInstance();
-        $loader->alias('productsService', ProductServiceFacade::class);
+        $loader->alias('ProductsService', ProductServiceFacade::class);
 
     }
 
