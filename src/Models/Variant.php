@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $product_id
  * @property string $code
+ * @property bool $is_visible
  * @property float $extra_price
  * @property string|null $description
  * @property Carbon|null $created_at
@@ -32,13 +33,15 @@ class Variant extends Model
 
 	protected $casts = [
 		'product_id' => 'int',
-		'extra_price' => 'float'
+		'extra_price' => 'float',
+		'is_visible' => 'bool',
 	];
 
 	protected $fillable = [
 		'product_id',
 		'code',
 		'extra_price',
+		'is_visible',
 		'description'
 	];
 
