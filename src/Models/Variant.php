@@ -4,37 +4,42 @@
 namespace MojaHedi\Product\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class ProductSupplier
+ * Class Variant
  *
  * @property int $id
  * @property int $product_id
- * @property int $supplier_id
+ * @property string $code
+ * @property float $extra_price
+ * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  *
  * @property Product $product
- * @property Supplier $supplier
+ * @property Collection|Variable[] $variables
  *
  * @package App\Models
  */
-class ProductSupplier extends Model
+class Variant extends Model
 {
 	use SoftDeletes;
-	protected $table = 'product_suppliers';
+	protected $table = 'variants';
 
 	protected $casts = [
 		'product_id' => 'int',
-		'supplier_id' => 'int'
+		'extra_price' => 'float'
 	];
 
 	protected $fillable = [
 		'product_id',
-		'supplier_id'
+		'code',
+		'extra_price',
+		'description'
 	];
 
 	public function product()
@@ -42,8 +47,8 @@ class ProductSupplier extends Model
 		return $this->belongsTo(Product::class);
 	}
 
-	public function supplier()
+	public function variables()
 	{
-		return $this->belongsTo(Supplier::class);
+		return $this->hasMany(Variable::class);
 	}
 }

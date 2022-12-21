@@ -7,25 +7,25 @@ use MojaHedi\Product\Models\Product;
 
 class ProductRepository implements RepositoryInterface
 {
-    private $model = null;
+    private $model = Product::class;
 
 
 
     public function getAll()
     {
-        return Product::all();
+        return $this->model::all();
     }
     public function getById($model_id)
     {
-        return Product::find($model_id);
+        return $this->model::find($model_id);
     }
     public function delete(Model $model)
     {
-        Product::destroy($model->id);
+        $this->model::destroy($model->id);
     }
     public function create(array $data)
     {
-        Product::create($data);
+        $this->model::create($data);
     }
     public function update(Model $model, array $data)
     {
@@ -36,5 +36,9 @@ class ProductRepository implements RepositoryInterface
     public function getFulfilled()
     {
         //TODO
+    }
+
+    public function getProductVariants( Model $model ){
+        return $model->variants();
     }
 }

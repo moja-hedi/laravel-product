@@ -1,16 +1,49 @@
 <?php
 
+
 namespace MojaHedi\Product\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class ProductCategory
+ *
+ * @property int $id
+ * @property int $product_id
+ * @property int $category_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property string|null $deleted_at
+ *
+ * @property Product $product
+ * @property Category $category
+ *
+ * @package App\Models
+ */
 class ProductCategory extends Model
 {
-    //   use HasFactory;
-    use SoftDeletes;
-    protected $timestamps = true;
+	use SoftDeletes;
+	protected $table = 'product_categories';
 
-    protected $fillable = ['id', 'product_id', 'category_id'];
+	protected $casts = [
+		'product_id' => 'int',
+		'category_id' => 'int'
+	];
+
+	protected $fillable = [
+		'product_id',
+		'category_id'
+	];
+
+	public function product()
+	{
+		return $this->belongsTo(Product::class);
+	}
+
+	public function category()
+	{
+		return $this->belongsTo(Category::class);
+	}
 }
