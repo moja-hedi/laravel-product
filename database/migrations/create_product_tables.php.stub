@@ -13,6 +13,14 @@ class CreateProductTables extends Migration
      */
     public function up()
     {
+        Schema::create('expiration_model_refs', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->integer('day_count')->default(1);
+            $table->timestamps();
+            $table->softDeletes();
+
+        });
 
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -44,6 +52,35 @@ class CreateProductTables extends Migration
             $table->softDeletes();
 
             $table->unique(['code']);
+        });
+
+
+        Schema::create('product_prices', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->float('price');
+            $table->bigInteger('product_id');
+            $table->dateTime('from')->default(now());
+            $table->dateTime('till')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('product_id')->references('id')->on('products')->onUpdate('CASCADE')->onDelete('NO ACTION');
+
+        });
+
+
+        Schema::create('product_expiration_models', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('product_id');
+            $table->bigInteger('expiration_model_ref_id');
+            $table->dateTime('from')->default(now());
+            $table->dateTime('till')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('product_id')->references('id')->on('products')->onUpdate('CASCADE')->onDelete('NO ACTION');
+            $table->foreign('expiration_model_ref_id')->references('id')->on('expiration_model_refs')->onUpdate('CASCADE')->onDelete('NO ACTION');
+
         });
 
         Schema::create('product_categories', function (Blueprint $table) {
@@ -126,13 +163,14 @@ class CreateProductTables extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('variant_id');
             $table->bigInteger('variable_value_ref_id');
-            $table->json('variable_ref_id');
+            $table->bigInteger('variable_ref_id');
             $table->float('extra_price')->default(0.0);
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('variant_id')->references('id')->on('variants')->onUpdate('CASCADE')->onDelete('NO ACTION');
             $table->foreign('variable_value_ref_id')->references('id')->on('variable_value_refs')->onUpdate('CASCADE')->onDelete('NO ACTION');
+            $table->foreign('variable_ref_id')->references('id')->on('variable_refs')->onUpdate('CASCADE')->onDelete('NO ACTION');
 
         });
     }
