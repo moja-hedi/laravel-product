@@ -17,6 +17,7 @@ class CreateProductTables extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->boolean('is_root')->default(1);
             $table->string('category_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -53,6 +54,10 @@ class CreateProductTables extends Migration
             $table->softDeletes();
 
             $table->unique(['product_id', 'category_id']);
+
+            $table->foreign('product_id')->references('id')->on('products')->onUpdate('CASCADE')->onDelete('NO ACTION');
+            $table->foreign('category_id')->references('id')->on('categories')->onUpdate('CASCADE')->onDelete('NO ACTION');
+
         });
 
         Schema::create('product_suppliers', function (Blueprint $table) {
@@ -63,9 +68,13 @@ class CreateProductTables extends Migration
             $table->softDeletes();
 
             $table->unique(['product_id', 'supplier_id']);
+
+            $table->foreign('product_id')->references('id')->on('products')->onUpdate('CASCADE')->onDelete('NO ACTION');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('CASCADE')->onDelete('NO ACTION');
+
         });
 
-        Schema::create('variant_type_refs', function (Blueprint $table) {
+        Schema::create('variable_type_refs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('code');
@@ -75,7 +84,7 @@ class CreateProductTables extends Migration
             $table->unique(['code']);
         });
 
-        Schema::create('variant_refs', function (Blueprint $table) {
+        Schema::create('variable_refs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('code');
@@ -84,17 +93,22 @@ class CreateProductTables extends Migration
             $table->softDeletes();
 
             $table->unique(['code']);
+
+            $table->foreign('variable_type_ref_id')->references('id')->on('variable_type_refs')->onUpdate('CASCADE')->onDelete('NO ACTION');
+
         });
 
-        Schema::create('variant_value_refs', function (Blueprint $table) {
+        Schema::create('variable_value_refs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('variant_ref_id');
+            $table->bigInteger('variable_ref_id');
             $table->string('value');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('variable_ref_id')->references('id')->on('variable_refs')->onUpdate('CASCADE')->onDelete('NO ACTION');
         });
 
-        Schema::create('product_variants', function (Blueprint $table) {
+        Schema::create('variants', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('product_id');
             $table->string('code');
@@ -104,15 +118,22 @@ class CreateProductTables extends Migration
             $table->softDeletes();
 
             $table->unique(['code']);
+
+            $table->foreign('product_id')->references('id')->on('products')->onUpdate('CASCADE')->onDelete('NO ACTION');
         });
 
         Schema::create('variables', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('product_variant_id');
-            $table->bigInteger('variable_ref_id');
+            $table->bigInteger('variant_id');
+            $table->bigInteger('variable_value_ref_id');
+            $table->json('variable_ref_id');
             $table->float('extra_price')->default(0.0);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('variant_id')->references('id')->on('variants')->onUpdate('CASCADE')->onDelete('NO ACTION');
+            $table->foreign('variable_value_ref_id')->references('id')->on('variable_value_refs')->onUpdate('CASCADE')->onDelete('NO ACTION');
+
         });
     }
 
@@ -124,11 +145,11 @@ class CreateProductTables extends Migration
     public function down()
     {
 
-        Schema::drop('variables');
+        Schema::drop('variants');
         Schema::drop('product_variants');
-        Schema::drop('variant_value_refs');
-        Schema::drop('variant_refs');
-        Schema::drop('variant_type_refs');
+        Schema::drop('variable_value_refs');
+        Schema::drop('variable_refs');
+        Schema::drop('variable_type_refs');
         Schema::drop('product_suppliers');
         Schema::drop('product_categories');
         Schema::drop('products');
