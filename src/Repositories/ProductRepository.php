@@ -31,13 +31,14 @@ class ProductRepository implements RepositoryInterface
     }
     public function create(array $data)
     {
-        $this->model::create($data);
+        return $this->model::create($data);
     }
     public function update(Model $model, array $data)
     {
         $model->update(
             $data
         );
+        return $model;
     }
     public function getFulfilled()
     {

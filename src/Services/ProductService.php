@@ -2,6 +2,8 @@
 
 namespace MojaHedi\Product\Services;
 
+use MojaHedi\Product\Models\Product;
+
 class ProductService
 {
 
@@ -11,10 +13,6 @@ class ProductService
     public function __construct($productRepository){
         $this->productRepository = $productRepository;
 
-    }
-
-    public function test(){
-        echo "hi";
     }
 
     //DONE
@@ -29,7 +27,29 @@ class ProductService
         return $this->productRepository->getProductsVariants( );
     }
 
+    public function getProducts()
+    {
+        return $this->productRepository->getAll();
+    }
+
+    public function getProduct($product_id){
+        return $this->productRepository->getById($product_id);
+    }
+
+    public function delete(Product $product)
+    {
+        $this->productRepository->delete($product);
+    }
 
 
+    public function craete($data)
+    {
+        return $this->productRepository->create($data);
+    }
+
+    public function update( Product $product ,$data)
+    {
+        return $this->productRepository->update($product, $data);
+    }
 
 }
