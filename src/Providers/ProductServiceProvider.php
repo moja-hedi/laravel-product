@@ -8,7 +8,9 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\AliasLoader;
 use MojaHedi\Product\Facades\ProductServiceFacade;
 use MojaHedi\Product\Repositories\ProductRepository;
+use MojaHedi\Product\Repositories\VariantRepository;
 use MojaHedi\Product\Services\ProductService;
+use MojaHedi\Product\Services\VariantService;
 
 class ProductServiceProvider extends ServiceProvider
 {
@@ -21,10 +23,11 @@ class ProductServiceProvider extends ServiceProvider
     {
 
         $this->app->singleton('productRepository', ProductRepository::class);
+        $this->app->singleton('variantRepository', VariantRepository::class);
 
 
         $this->app->singleton('ProductsService', function ($app) {
-            $productService = new ProductService($app['productRepository']);
+            $productService = new ProductService($app['productRepository'], $app['variantRepository']);
 
             // $productService->setProductRepository($app['productRepository']);
 

@@ -3,16 +3,18 @@
 namespace MojaHedi\Product\Services;
 
 use MojaHedi\Product\Models\Product;
+use MojaHedi\Product\Models\Variant;
 
 class ProductService
 {
 
     protected $productRepository;
+    protected $variantRepository;
 
 
-    public function __construct($productRepository){
+    public function __construct($productRepository, $variantRepository){
         $this->productRepository = $productRepository;
-
+        $this->variantRepository = $variantRepository;
     }
 
     //DONE
@@ -36,20 +38,30 @@ class ProductService
         return $this->productRepository->getById($product_id);
     }
 
-    public function delete(Product $product)
+    public function deleteProduct(Product $product)
     {
         $this->productRepository->delete($product);
     }
 
-
-    public function craete($data)
+    public function craeteProduct($data)
     {
         return $this->productRepository->create($data);
     }
 
-    public function update( Product $product ,$data)
+    public function updateProduct( Product $product ,$data)
     {
         return $this->productRepository->update($product, $data);
     }
 
+    public function setProductPrice( Product $product, $price = 0){
+        return $this->productRepository->setPrice($product, $price);
+    }
+
+    // variants service
+
+
+    public function deleteVariantVariable( Variant $variant , $variable_value_ref_id )
+    {
+        return $this->variantRepository->deleteVariable($variant, $variable_value_ref_id);
+    }
 }

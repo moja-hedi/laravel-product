@@ -2,8 +2,11 @@
 
 namespace MojaHedi\Product\Repositories;
 
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use MojaHedi\Product\Models\Product;
 use MojaHedi\Product\Models\ProductPrice;
 use MojaHedi\Product\Models\Variable;
@@ -55,7 +58,6 @@ class ProductRepository implements RepositoryInterface
         $data = [];
 
         foreach ($products as $products_detail) {
-
             $data[$products_detail->id] = $products_detail->getAttributes();
             $data[$products_detail->id]['price'] = $products_detail->current_price();
 
@@ -99,7 +101,7 @@ class ProductRepository implements RepositoryInterface
     }
 
     //DONE
-    public function getProductVariants( $product_id )
+    public function getProductVariants($product_id)
     {
         $products = Product::with('variants')->wehere('id', '=', $product_id)->get();
 
@@ -146,4 +148,55 @@ class ProductRepository implements RepositoryInterface
         return $data;
     }
 
+
+    public function setPrice($model, $price = 0)
+    {
+        try {
+            $model->prices->filter(function ($price) {
+                return $price->till == null;
+            })->each(function ($price) {
+                $price->update(['till' => Carbon::now()]);
+            });
+
+            $productPrice = new ProductPrice(
+                [
+                    'price' => $price,
+                    'from' => Carbon::now(),
+                    'till' => null,
+                    'product_id' => $model->id
+                ]
+            );
+
+
+            $productPrice->save();
+        } catch(Exception $e) {
+            Log::info($e->getMessage());
+            Log::debug($e->getTraceAsString());
+        }
+    }
+
+
+    public function setVariant($model, $variant_code, $extra_price = 0, $description = null)
+    {
+        try {
+            $variant = new Variant(
+                [
+                    'extra_price' => $extra_price,
+                    'code' => $variant_code,
+                    'descriptio' => $description,
+                    'product_id' => $model->id
+                ]
+            );
+
+            $variant->save();
+
+            return $variant;
+        } catch(Exception $e) {
+            Log::info($e->getMessage());
+            Log::debug($e->getTraceAsString());
+        }
+        return null;
+    }
+
+    
 }
