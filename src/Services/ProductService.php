@@ -17,10 +17,23 @@ class ProductService
         echo "hi";
     }
 
-    public function getProductsDetail()
+    public function getProductVariants( $filter = [] )
     {
-        return $this->productRepository->getAll();
+        return $this->productRepository->getProductVariants( null, $filter);
     }
+
+    public function getProductVariantsDetails( $product_id )
+    {
+        return $this->productRepository->getProductVariantsDetails( $product_id );
+    }
+
+    //DONE
+    public function getProductsVariants( )
+    {
+        return $this->productRepository->getProductsVariants( );
+    }
+
+
 
 
 }

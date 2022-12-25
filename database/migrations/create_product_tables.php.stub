@@ -139,6 +139,7 @@ class CreateProductTables extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('variable_ref_id');
             $table->string('value');
+            $table->string('code');
             $table->timestamps();
             $table->softDeletes();
 
