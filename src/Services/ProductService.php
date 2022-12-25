@@ -17,14 +17,10 @@ class ProductService
         echo "hi";
     }
 
-    public function getProductVariants( $filter = [] )
+    //DONE
+    public function getProductVariants( $product_id )
     {
-        return $this->productRepository->getProductVariants( null, $filter);
-    }
-
-    public function getProductVariantsDetails( $product_id )
-    {
-        return $this->productRepository->getProductVariantsDetails( $product_id );
+        return $this->productRepository->getProductVariants( $product_id);
     }
 
     //DONE

@@ -50,4 +50,12 @@ class Product extends Model
 	{
 		return $this->hasMany(Variant::class);
 	}
+
+    public function prices(){
+        return $this->hasMany(ProductPrice::class);
+    }
+
+    public function current_price(){
+        return $this->prices()->where('from' ,'<', Carbon::now())->whereNull('till')->first();
+    }
 }
