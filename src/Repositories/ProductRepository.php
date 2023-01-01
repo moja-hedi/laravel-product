@@ -24,18 +24,22 @@ class ProductRepository implements RepositoryInterface
     {
         return $this->model::all();
     }
+
     public function getById($model_id)
     {
         return $this->model::find($model_id);
     }
+
     public function delete(Model $model)
     {
         $this->model::destroy($model->id);
     }
+
     public function create(array $data)
     {
         return $this->model::create($data);
     }
+
     public function update(Model $model, array $data)
     {
         $model->update(
@@ -43,12 +47,27 @@ class ProductRepository implements RepositoryInterface
         );
         return $model;
     }
+
     public function getFulfilled()
     {
         //TODO
     }
 
 
+    /**
+     * Create product with price
+     */
+    public function createProduct(array $product_data, $price = 0)
+    {
+        $product = $this->create($product_data);
+        ProductPrice::create([
+            'price' => $price,
+            'product_id' => $product->id,
+            'from' => Carbon::now(),
+            'till' => null
+        ]);
+        return $product;
+    }
 
     //DONE
     public function getProductsVariants()
@@ -85,14 +104,14 @@ class ProductRepository implements RepositoryInterface
                             'id' => $variable_value_ref->id,
                             'value' => $variable_value_ref->value,
                             'extra_price' => $variable->extra_price,
-                            'total_price' => $variable->extra_price + $variant->extra_price + $products_detail->current_price()->price
+                            'total_price' => ($variable?->extra_price ?? 0) + ($variant?->extra_price ?? 0 ) + ($products_detail?->current_price()?->price ?? 0)
                         ];
                     }
 
                     $group['items'] = $items;
 
 
-                    $data[$products_detail->id]['variants'][$variant->id]['variables'] = $group;
+                    $data[$products_detail->id]['variants'][$variant->id]['variables'][] = $group;
                 }
             }
         }
@@ -198,5 +217,5 @@ class ProductRepository implements RepositoryInterface
         return null;
     }
 
-    
+
 }
