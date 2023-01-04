@@ -1,61 +1,61 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
 
-namespace MojaHedi\Product\Models;
+namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Product
- *
+ * 
  * @property int $id
- * @property string $name
+ * @property int $template_id
  * @property string $code
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string|null $deleted_at
- *
- * @property Collection|ProductCategory[] $product_categories
- * @property Collection|Supplier[] $suppliers
- * @property Collection|Variant[] $variants
+ * @property string|null $barcode
+ * @property string|null $combination_indices
+ * @property string|null $volume
+ * @property string|null $weight
+ * @property string|null $width
+ * @property string|null $height
+ * @property string|null $length
+ * 
+ * @property Template $template
+ * @property Collection|VariantCombination[] $variant_combinations
  *
  * @package App\Models
  */
 class Product extends Model
 {
-	use SoftDeletes;
 	protected $table = 'products';
+	public $timestamps = false;
 
-	protected $fillable = [
-		'name',
-		'code'
+	protected $casts = [
+		'template_id' => 'int'
 	];
 
-	public function product_categories()
+	protected $fillable = [
+		'template_id',
+		'code',
+		'barcode',
+		'combination_indices',
+		'volume',
+		'weight',
+		'width',
+		'height',
+		'length'
+	];
+
+	public function template()
 	{
-		return $this->hasMany(ProductCategory::class);
+		return $this->belongsTo(Template::class);
 	}
 
-	public function suppliers()
+	public function variant_combinations()
 	{
-		return $this->belongsToMany(Supplier::class, 'product_suppliers')
-					->withPivot('id', 'deleted_at')
-					->withTimestamps();
+		return $this->hasMany(VariantCombination::class);
 	}
-
-	public function variants()
-	{
-		return $this->hasMany(Variant::class);
-	}
-
-    public function prices(){
-        return $this->hasMany(ProductPrice::class);
-    }
-
-    public function current_price(){
-        return $this->prices()->where('from' ,'<', Carbon::now())->whereNull('till')->first();
-    }
 }
