@@ -23,11 +23,10 @@ class ProductServiceProvider extends ServiceProvider
     {
 
         $this->app->singleton('productRepository', ProductRepository::class);
-        $this->app->singleton('variantRepository', VariantRepository::class);
 
 
         $this->app->singleton('ProductsService', function ($app) {
-            $productService = new ProductService($app['productRepository'], $app['variantRepository']);
+            $productService = new ProductService($app['productRepository']);
 
             // $productService->setProductRepository($app['productRepository']);
 
