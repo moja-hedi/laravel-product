@@ -25,6 +25,12 @@ class ProductService
         return $this->productRepository->create( $data );
     }
 
+    //create new variant
+    public function createProductVariant( $template_id, $attribute_id, $attribute_values )
+    {
+        return $this->productRepository->addVariants( $template_id, $attribute_id, $attribute_values );
+    }
+
     public function createAttribute( $data )
     {
         return $this->attributeRepository->create( $data );
