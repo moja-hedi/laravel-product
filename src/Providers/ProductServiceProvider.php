@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\AliasLoader;
 use MojaHedi\Product\Facades\ProductServiceFacade;
+use MojaHedi\Product\Repositories\AttributeRepository;
 use MojaHedi\Product\Repositories\ProductRepository;
 use MojaHedi\Product\Repositories\VariantRepository;
 use MojaHedi\Product\Services\ProductService;
@@ -23,10 +24,11 @@ class ProductServiceProvider extends ServiceProvider
     {
 
         $this->app->singleton('productRepository', ProductRepository::class);
+        $this->app->singleton('attributeRepository', AttributeRepository::class);
 
 
         $this->app->singleton('MojahediProducts', function ($app) {
-            $productService = new ProductService($app['productRepository']);
+            $productService = new ProductService($app['productRepository'],$app['attributeRepository']);
 
             // $productService->setProductRepository($app['productRepository']);
 

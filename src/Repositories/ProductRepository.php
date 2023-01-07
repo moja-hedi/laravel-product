@@ -24,7 +24,7 @@ class ProductRepository implements RepositoryInterface
 
     public function getAll()
     {
-        return $this->model::all();
+        return $this->template::with('products')->get();
     }
 
     public function getById($model_id)

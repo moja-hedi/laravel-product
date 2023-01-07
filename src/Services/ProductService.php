@@ -9,11 +9,12 @@ class ProductService
 {
 
     protected $productRepository;
-    // protected $variantRepository;
+    protected $attributeRepository;
 
 
-    public function __construct($productRepository){
+    public function __construct($productRepository, $attributeRepository){
         $this->productRepository = $productRepository;
+        $this->attributeRepository = $attributeRepository;
     }
 
 
@@ -24,12 +25,17 @@ class ProductService
         return $this->productRepository->create( $data );
     }
 
-    // //DONE
-    public function getProductVariants( $product_id )
+    public function createAttribute( $data )
     {
-        echo "hi";
-        // return $this->productRepository->getProductVariants( $product_id);
+        return $this->attributeRepository->create( $data );
     }
+
+    // //DONE
+    // public function getProducts( )
+    // {
+    //     echo "hi";
+    //     // return $this->productRepository->getProductVariants( $product_id);
+    // }
 
     // //DONE
     // public function getProductsVariants( )
@@ -37,10 +43,10 @@ class ProductService
     //     return $this->productRepository->getProductsVariants( );
     // }
 
-    // public function getProducts()
-    // {
-    //     return $this->productRepository->getAll();
-    // }
+    public function getProducts()
+    {
+        return $this->productRepository->getAll();
+    }
 
     // public function getProduct($product_id){
     //     return $this->productRepository->getById($product_id);
