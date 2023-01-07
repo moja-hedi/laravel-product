@@ -4,24 +4,24 @@
  * Created by Reliese Model.
  */
 
-namespace App\Models;
+namespace MojaHedi\Product\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class AttributeValue
- * 
+ *
  * @property int $id
  * @property int $attribute_id
  * @property string|null $name
  * @property int $sequence
- * 
+ *
  * @property Attribute $attribute
  * @property Collection|TemplateAttributeLine[] $template_attribute_lines
  * @property Collection|TemplateAttributeValue[] $template_attribute_values
  *
- * @package App\Models
+ * @package MojaHedi\Product\Models
  */
 class AttributeValue extends Model
 {

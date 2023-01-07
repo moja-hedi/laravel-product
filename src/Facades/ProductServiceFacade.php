@@ -11,6 +11,6 @@ class ProductServiceFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'ProductsService';
+        return 'MojahediProducts';
     }
 }

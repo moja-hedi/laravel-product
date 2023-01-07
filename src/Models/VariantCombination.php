@@ -4,20 +4,20 @@
  * Created by Reliese Model.
  */
 
-namespace App\Models;
+namespace MojaHedi\Product\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class VariantCombination
- * 
+ *
  * @property int $product_id
  * @property int $template_attribute_value_id
- * 
+ *
  * @property Product $product
  * @property TemplateAttributeValue $template_attribute_value
  *
- * @package App\Models
+ * @package MojaHedi\Product\Models
  */
 class VariantCombination extends Model
 {

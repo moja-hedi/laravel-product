@@ -4,14 +4,14 @@
  * Created by Reliese Model.
  */
 
-namespace App\Models;
+namespace MojaHedi\Product\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Product
- * 
+ *
  * @property int $id
  * @property int $template_id
  * @property string $code
@@ -22,11 +22,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $width
  * @property string|null $height
  * @property string|null $length
- * 
+ *
  * @property Template $template
  * @property Collection|VariantCombination[] $variant_combinations
  *
- * @package App\Models
+ * @package MojaHedi\Product\Models
  */
 class Product extends Model
 {

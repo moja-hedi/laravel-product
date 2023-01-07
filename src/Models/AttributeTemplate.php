@@ -4,20 +4,20 @@
  * Created by Reliese Model.
  */
 
-namespace App\Models;
+namespace MojaHedi\Product\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class AttributeTemplate
- * 
+ *
  * @property int $template_id
  * @property int $attribute_id
- * 
+ *
  * @property Template $template
  * @property Attribute $attribute
  *
- * @package App\Models
+ * @package MojaHedi\Product\Models
  */
 class AttributeTemplate extends Model
 {

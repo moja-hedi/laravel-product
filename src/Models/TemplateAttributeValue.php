@@ -4,26 +4,26 @@
  * Created by Reliese Model.
  */
 
-namespace App\Models;
+namespace MojaHedi\Product\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class TemplateAttributeValue
- * 
+ *
  * @property int $id
  * @property int $attribute_value_id
  * @property int $attribute_line_id
  * @property float|null $extra_price
  * @property int $attribute_id
  * @property int $template_id
- * 
+ *
  * @property AttributeValue $attribute_value
  * @property TemplateAttributeLine $template_attribute_line
  * @property Collection|VariantCombination[] $variant_combinations
  *
- * @package App\Models
+ * @package MojaHedi\Product\Models
  */
 class TemplateAttributeValue extends Model
 {

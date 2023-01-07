@@ -4,25 +4,25 @@
  * Created by Reliese Model.
  */
 
-namespace App\Models;
+namespace MojaHedi\Product\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class TemplateAttributeLine
- * 
+ *
  * @property int $id
  * @property int $template_id
  * @property int $attribute_id
  * @property int|null $value_count
- * 
+ *
  * @property Template $template
  * @property Attribute $attribute
  * @property Collection|AttributeValue[] $attribute_values
  * @property Collection|TemplateAttributeValue[] $template_attribute_values
  *
- * @package App\Models
+ * @package MojaHedi\Product\Models
  */
 class TemplateAttributeLine extends Model
 {
