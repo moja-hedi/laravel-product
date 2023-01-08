@@ -34,15 +34,6 @@ class CreateProductTables extends Migration
             $table->bigInteger('display_type');
         });
 
-        Schema::create('attribute_templates', function (Blueprint $table) {
-            $table->bigInteger('template_id');
-            $table->bigInteger('attribute_id');
-
-            $table->primary(['template_id', 'attribute_id']);
-            $table->foreign('template_id')->references('id')->on('templates')->onUpdate('CASCADE')->onDelete('NO ACTION');
-            $table->foreign('attribute_id')->references('id')->on('attributes')->onUpdate('CASCADE')->onDelete('NO ACTION');
-
-        });
 
         Schema::create('attribute_values', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -59,17 +50,6 @@ class CreateProductTables extends Migration
             $table->bigInteger('value_count')->nullable()->comment('number of attributes selected');
             $table->foreign('template_id')->references('id')->on('templates')->onUpdate('CASCADE')->onDelete('NO ACTION');
             $table->foreign('attribute_id')->references('id')->on('attributes')->onUpdate('CASCADE')->onDelete('NO ACTION');
-
-        });
-
-        Schema::create('attribute_value_template_attribute_lines', function (Blueprint $table) {
-            $table->bigInteger('attribute_value_id');
-            $table->bigInteger('template_attribute_line_id');
-
-            $table->primary(['attribute_value_id', 'template_attribute_line_id']);
-
-            $table->foreign('attribute_value_id')->references('id')->on('attribute_values')->onUpdate('CASCADE')->onDelete('NO ACTION');
-            $table->foreign('template_attribute_line_id')->references('id')->on('template_attribute_lines')->onUpdate('CASCADE')->onDelete('NO ACTION');
 
         });
 
@@ -128,9 +108,7 @@ class CreateProductTables extends Migration
         Schema::dropIfExists('template_attribute_values');
         Schema::dropIfExists('template_attribute_lines');
         Schema::dropIfExists('products');
-        Schema::dropIfExists('attribute_value_template_attribute_lines');
         Schema::dropIfExists('attribute_values');
-        Schema::dropIfExists('attribute_templates');
         Schema::dropIfExists('attributes');
         Schema::dropIfExists('templates');
 

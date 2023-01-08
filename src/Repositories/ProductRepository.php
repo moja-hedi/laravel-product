@@ -12,6 +12,7 @@ use MojaHedi\Product\Models\Attribute;
 use MojaHedi\Product\Models\Product;
 use MojaHedi\Product\Models\Template;
 use MojaHedi\Product\Models\TemplateAttributeLine;
+use MojaHedi\Product\Models\VariantCombination;
 use Ramsey\Uuid\Uuid;
 
 class ProductRepository implements RepositoryInterface
@@ -21,6 +22,7 @@ class ProductRepository implements RepositoryInterface
     private $attribute = Attribute::class;
     private $template_attribute_value = TemplateAttributeValue::class;
     private $template_attribute_line = TemplateAttributeLine::class;
+    private $variant_combination = VariantCombination::class;
 
 
 
@@ -103,39 +105,45 @@ class ProductRepository implements RepositoryInterface
     public function addVariants( $template_id, $attribute_id, $attribute_values ){
         try {
 
-            $template = $this->template::find($template_id);
-            $attribute = $this->attribute::find($attribute_id);
 
-            //check to prevent create duplicate relation based on template_id, attribute_id
-            if( config('product.simple_attribue_product') == true and
-                 sizeof($this->template_attribute_line::where('template_id', '=',$template_id)->where('attribute_id', '=', $attribute_id)->get())){
-                Log::info("Can not add one attribute more than one");
-                return;
-            }
 
             DB::beginTransaction();
 
-            //add atribute line
-            $template_attribute_line = $this->template_attribute_line::create(
-                [
-                    'template_id' => $template_id,
-                    'attribute_id' => $attribute_id,
-                    'value_count' => 0
-                ]
-            );
+            $template = $this->template::find($template_id);
+            $attribute = $this->attribute::find($attribute_id);
 
-            Log::info("get attribute lines");
 
-            //add attributes
-            foreach($attribute_values as  $attribute_value_id){
-                $this->template_attribute_value::create([
-                    'attribute_value_id' => $attribute_value_id,
-                    'attribute_line_id' => $template_attribute_line->id,
-                    'extra_price' => 0,
-                    'attribute_id' => $attribute_id,
-                    'template_id' => $template_id,
-                ]);
+            //check to prevent create duplicate relation based on template_id, attribute_id
+            if (sizeof($this->template_attribute_line::where('template_id', '=', $template_id)->where('attribute_id', '=', $attribute_id)->get()) == 0) {
+
+                //add atribute line
+                $template_attribute_line = $this->template_attribute_line::create(
+                    [
+                        'template_id' => $template_id,
+                        'attribute_id' => $attribute_id,
+                        'value_count' => 0
+                    ]
+                );
+
+                Log::info("get attribute lines");
+
+                //add attributes
+                foreach($attribute_values as  $attribute_value_id){
+                    $this->template_attribute_value::create([
+                        'attribute_value_id' => $attribute_value_id,
+                        'attribute_line_id' => $template_attribute_line->id,
+                        'extra_price' => 0,
+                        'attribute_id' => $attribute_id,
+                        'template_id' => $template_id,
+                    ]);
+                }
+
             }
+            else{
+                Log::info("Can not add one attribute more than one");
+            }
+
+
 
             //ceate 2D array of all ids of attribute values
             Log::info("calculate 2d arrays");
@@ -156,6 +164,11 @@ class ProductRepository implements RepositoryInterface
             // generate cartisan products of all attributes
             $variant_combinations = getCombination($product_attribute_values_combination);
             //store all combinations
+
+            foreach ($template->products as $p) {
+                $p->variant_combinations()->delete();
+            }
+
             $template->products()->delete();
 
             foreach( $variant_combinations as $combuination){
@@ -168,6 +181,21 @@ class ProductRepository implements RepositoryInterface
                 ];
                 Log::info(print_r($data, true));
                 $p = $this->product::create($data);
+
+                //Store variant combinations
+
+                $template_attribute_values = $this->template_attribute_value::where('template_id', '=', $template_id)->get();
+
+                foreach($template_attribute_values as $template_attribute_value)
+                {
+                    $combuination_array = explode(",",$combuination);
+                    if(in_array($template_attribute_value->attribute_value_id , $combuination_array)){
+                        $this->variant_combination::create([
+                            'product_id' => $p->id,
+                            'template_attribute_value_id' => $template_attribute_value->id
+                        ]);
+                    }
+                }
                 Log::info($p->id);
             }
 

@@ -30,6 +30,11 @@ class VariantCombination extends Model
 		'template_attribute_value_id' => 'int'
 	];
 
+	protected $fillable = [
+		'product_id',
+		'template_attribute_value_id',
+	];
+
 	public function product()
 	{
 		return $this->belongsTo(Product::class);
