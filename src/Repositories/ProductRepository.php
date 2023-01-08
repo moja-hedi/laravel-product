@@ -103,12 +103,18 @@ class ProductRepository implements RepositoryInterface
     public function addVariants( $template_id, $attribute_id, $attribute_values ){
         try {
 
-            Log::info("at the begining");
-            DB::beginTransaction();
             $template = $this->template::find($template_id);
             $attribute = $this->attribute::find($attribute_id);
 
-            //TODO: check to prevent create duplicate relation based on template_id, attribute_id
+            //check to prevent create duplicate relation based on template_id, attribute_id
+            if( config('product.simple_attribue_product') == true and
+                 sizeof($this->template_attribute_line::where('template_id', '=',$template_id)->where('attribute_id', '=', $attribute_id)->get())){
+                Log::info("Can not add one attribute more than one");
+                return;
+            }
+
+            DB::beginTransaction();
+
             //add atribute line
             $template_attribute_line = $this->template_attribute_line::create(
                 [
@@ -131,10 +137,7 @@ class ProductRepository implements RepositoryInterface
                 ]);
             }
 
-            //call proc 1
-
-            //ceate 2D array of all value ids
-
+            //ceate 2D array of all ids of attribute values
             Log::info("calculate 2d arrays");
             $template_attributes = $this->template_attribute_line::where('template_id', '=', $template_id)->get();
             $product_attribute_values_combination = [];
@@ -149,16 +152,12 @@ class ProductRepository implements RepositoryInterface
                 $product_attribute_values_combination[] = $items;
 
             }
-            //get all combination of items
-            //dd($product_attribute_values_combination);
 
+            // generate cartisan products of all attributes
             $variant_combinations = getCombination($product_attribute_values_combination);
-
-            Log::info("combination calculated");
             //store all combinations
             $template->products()->delete();
 
-            Log::info("old variant deleted");
             foreach( $variant_combinations as $combuination){
                 Log::info($combuination ."_". $template_id);
                 $data = [
@@ -173,19 +172,15 @@ class ProductRepository implements RepositoryInterface
             }
 
             DB::commit();
-            Log::info("all things commited");
+            Log::info("New variants based on attributes calculated");
         }
         catch(Exception $e)
         {
-            Log::info("Error on create variant");
+            Log::info("Error on create variants. Roll back to latest working state.");
             DB::rollBack();
             Log::info($e->getMessage());
         }
 
     }
-
-
-
-
 
 }
