@@ -17,8 +17,6 @@ class ProductService
         $this->attributeRepository = $attributeRepository;
     }
 
-
-
     //create new product
     public function createProduct( $data )
     {
@@ -36,52 +34,18 @@ class ProductService
         return $this->attributeRepository->create( $data );
     }
 
-    // //DONE
-    // public function getProducts( )
-    // {
-    //     echo "hi";
-    //     // return $this->productRepository->getProductVariants( $product_id);
-    // }
-
-    // //DONE
-    // public function getProductsVariants( )
-    // {
-    //     return $this->productRepository->getProductsVariants( );
-    // }
-
     public function getProducts()
     {
         return $this->productRepository->getAll();
     }
+    
+    public function getProduct($product_id)
+    {
+        return $this->productRepository->getProduct($product_id);
+    }
 
-    // public function getProduct($product_id){
-    //     return $this->productRepository->getById($product_id);
-    // }
-
-    // public function deleteProduct(Product $product)
-    // {
-    //     $this->productRepository->delete($product);
-    // }
-
-    // public function craeteProduct($data)
-    // {
-    //     return $this->productRepository->create($data);
-    // }
-
-    // public function updateProduct( Product $product ,$data)
-    // {
-    //     return $this->productRepository->update($product, $data);
-    // }
-
-    // public function setProductPrice( Product $product, $price = 0){
-    //     return $this->productRepository->setPrice($product, $price);
-    // }
-
-    // // variants service
-
-
-    // public function deleteVariantVariable( Variant $variant , $variable_value_ref_id )
-    // {
-    //     return $this->variantRepository->deleteVariable($variant, $variable_value_ref_id);
-    // }
+    public function getAttributesValuesDetail( array $attribute_values_id)
+    {
+        return $this->attributeRepository->getAttributesByAttributeId( $attribute_values_id );
+    }
 }

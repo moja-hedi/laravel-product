@@ -58,4 +58,8 @@ class Product extends Model
 	{
 		return $this->hasMany(VariantCombination::class);
 	}
+	public function attribute_values()
+	{
+		return $this->belongsToMany(TemplateAttributeValue::class, VariantCombination::class, 'product_id', 'template_attribute_value_id');
+	}
 }

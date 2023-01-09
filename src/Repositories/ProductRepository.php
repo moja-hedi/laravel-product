@@ -105,8 +105,6 @@ class ProductRepository implements RepositoryInterface
     public function addVariants( $template_id, $attribute_id, $attribute_values ){
         try {
 
-
-
             DB::beginTransaction();
 
             $template = $this->template::find($template_id);
@@ -211,4 +209,12 @@ class ProductRepository implements RepositoryInterface
 
     }
 
+    public function getProduct($product_id)
+    {
+        $product = $this->product::with(['attribute_values','template'])->where('products.id' ,'=', $product_id)
+        ->get();
+
+        return $product;
+
+    }
 }

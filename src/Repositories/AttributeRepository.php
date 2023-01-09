@@ -76,4 +76,17 @@ class AttributeRepository implements RepositoryInterface
         //TODO
     }
 
+
+    public function getAttributesByAttributeId( $attribute_value_ids )
+    {
+        $attributes = [];
+        foreach($attribute_value_ids as $attribute_value_id )
+        {
+            $attribute_value = AttributeValue::find($attribute_value_id);
+
+            $attributes[] = Attribute::with('attribute_values')->find($attribute_value->attribute_id);
+
+        }
+        return $attributes;
+    }
 }
