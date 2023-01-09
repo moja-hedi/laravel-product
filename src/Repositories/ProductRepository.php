@@ -33,12 +33,12 @@ class ProductRepository implements RepositoryInterface
 
     public function getById($model_id)
     {
-        return $this->model::find($model_id);
+        return $this->template::find($model_id);
     }
 
-    public function delete(Model $model)
+    public function delete($model)
     {
-        $this->model::destroy($model->id);
+        $model->delete();
     }
 
     public function create(array $data)
@@ -91,10 +91,22 @@ class ProductRepository implements RepositoryInterface
 
     public function update(Model $model, array $data)
     {
-        $model->update(
-            $data
-        );
-        return $model;
+        try{
+            DB::beginTransaction();
+
+            $template = $model->update($data);
+
+            DB::commit();
+
+            return $template;
+        }
+        catch(\Exception $e)
+        {
+            Log::info("Error on update product template");
+            DB::rollBack();
+            Log::info($e->getMessage());
+        }
+
     }
 
     public function getFulfilled()
@@ -211,10 +223,32 @@ class ProductRepository implements RepositoryInterface
 
     public function getProduct($product_id)
     {
-        $product = $this->product::with(['attribute_values','template'])->where('products.id' ,'=', $product_id)
-        ->get();
+        $product = $this->product::with(['attribute_values','template'])
+            ->where('products.id' ,'=', $product_id)
+            ->first();
 
         return $product;
+
+    }
+
+    public function updateProduct($model, $data)
+    {
+        try{
+            DB::beginTransaction();
+
+            $product = $model->update($data);
+
+            DB::commit();
+
+            return $product;
+        }
+        catch(\Exception $e)
+        {
+            Log::info("Error on update product");
+            DB::rollBack();
+            Log::info($e->getMessage());
+        }
+
 
     }
 }

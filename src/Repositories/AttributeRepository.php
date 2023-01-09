@@ -25,9 +25,9 @@ class AttributeRepository implements RepositoryInterface
         return $this->attribute::find($model_id);
     }
 
-    public function delete($model)
+    public function delete($model_id)
     {
-        $this->attribute::destroy($model->id);
+        $this->attribute::destroy($model_id);
     }
 
     public function create(array $data)

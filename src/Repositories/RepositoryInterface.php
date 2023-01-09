@@ -7,7 +7,7 @@ interface  RepositoryInterface
 {
     public function getAll();
     public function getById($model_id);
-    public function delete( Model $model);
+    public function delete( $model_id);
     public function create(array $data);
     public function update( Model $model, array $data);
     public function getFulfilled();
